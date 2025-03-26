@@ -19,10 +19,7 @@ const PostListItems: React.FC = () => {
           <span>2 days ago</span>
         </div>
         <p>
-          kjhsafdljhadsfljhdsaf;jhsaf;ljhdsf;ljhdsaflhjdsf;jhdsfljsdfldsflkjdsf
-          lkkjdsflkjdsaflkjdsflksaflksdf'lklljfdlijadsfdlkjdsaflkjdsaf;lkjdsaf;
-          lkjjdsfd;lkjsaf;lkjdsaf;lkjsfd;lkjsaf;lkjdsf;lkjdsdf;lkjdsf;lkjdsf;
-          lkjsf;lkkjdsf;ljds;lkfjdsa;lkfjdsa;lkfjdsa;lkfjdsaa;lfkjdsa;lfkjdsf;kjdsf;lkj1j
+         Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium sed fugit dignissimos repellat officia aperiam delectus, impedit labore error sint, velit earum modi dicta iusto quidem consequuntur reprehenderit tempora dolor!
         </p>
         <Link to="/text" className="underline text-blue-800 text-sm">
           Read More
