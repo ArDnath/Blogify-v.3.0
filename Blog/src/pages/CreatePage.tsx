@@ -1,11 +1,11 @@
 import React from 'react';
 
-const HeroSection = () => {
+const CreatePage = () => {
     return (
         <div>
-            
+            Write
         </div>
     );
 }
 
-export default HeroSection;
+export default CreatePage;
