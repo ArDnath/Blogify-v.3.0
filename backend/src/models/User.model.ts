@@ -1,6 +1,5 @@
-import {Schema, model, Document} from 'mongoose';
-import {decode, sign,verify} from 'hono/jwt';
-
+import { Schema, model, Document } from 'mongoose';
+// Replace hono/jwt with jsonwebtoken
 
 export interface IUser extends Document {
     username: string;
@@ -70,30 +69,27 @@ userSchema.methods.isPasswordCorrect = async function (password:string){
 }
 
 //Generate Access Token
-userSchema.methods.generateAccessToken = async function (){
-    return await sign(
-        {
-        _id: this._id,
-        email: this.email,
-        username: this.username,
-        exp:  Math.floor(Date.now() / 1000) + parseInt(process.env.ACCESS_TOKEN_EXPIRY || "3600"),
-    },
-    process.env.ACCESS_TOKEN_SECRET as string,
-)
-}
-
-userSchema.methods.generateRefreshToken = async function (){
-    return await sign(
+userSchema.methods.generateAccessToken = async function () {
+    return jwt.sign(
         {
             _id: this._id,
-            exp: Math.floor(Date.now()/1000) + parseInt(process.env.REFRESH_TOKEN_EXPIRY || "604800"),
-        }
-        ,
-        process.env.REFRESH_TOKEN_SECRET as string,
-    )
-}
+            email: this.email,
+            username: this.username,
+            exp: Math.floor(Date.now() / 1000) + parseInt(process.env.ACCESS_TOKEN_EXPIRY || "3600"),
+        },
+        process.env.ACCESS_TOKEN_SECRET as string
+    );
+};
 
-
+userSchema.methods.generateRefreshToken = async function () {
+    return jwt.sign(
+        {
+            _id: this._id,
+            exp: Math.floor(Date.now() / 1000) + parseInt(process.env.REFRESH_TOKEN_EXPIRY || "604800"),
+        },
+        process.env.REFRESH_TOKEN_SECRET as string
+    );
+};
 
 const User =model<IUser>('User',userSchema);
 
