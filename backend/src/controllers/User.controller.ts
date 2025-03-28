@@ -1,6 +1,12 @@
 import User from "../models/User.model";
 import { Context } from "hono";
 
+interface ISignup {
+    username: string;
+    email: string;
+    password: string;
+  }
+
 export const generateAccessAndRefreshToken = async (c: Context, userId: string) => {
     try {
         const user = await User.findById(userId);
@@ -22,14 +28,27 @@ export const generateAccessAndRefreshToken = async (c: Context, userId: string) 
 
 const registerUser = async (c: Context) => {
     try {
-        const { username, email, password } = await c.req.json();
+        const { username, email, password } :ISignup= await c.req.json();
 
-        console.log(username)
+        const userNameLower = username.toLocaleLowerCase();
+        const emailLower = email.toLocaleLowerCase();
+        
+
+        if ([email, username, password].some((field) => field?.trim() === "")) {
+            return {
+              data: { message: "All fields are required" },
+              status: 401,
+            };
+          }
+
+          console.log(email)
+        
 
         // Check if user already exists
         const existedUser = await User.findOne({
-            $or: [{ username }, { email }]
+            $or: [{ username:userNameLower }, { email :emailLower}]
         });
+
 
         if (existedUser) {
             return c.json(
@@ -40,20 +59,23 @@ const registerUser = async (c: Context) => {
 
         // Create new user
         const user = await User.create({
-            email,
-            password,
-            username,
+            email:emailLower,
+            password:password,
+            username:userNameLower,
             isEmailVerified: false,
         });
-
+        
         const { unHashedToken, hashedToken, tokenExpiry } = await user.generateTemporaryToken();
 
         user.emailVerificationToken = hashedToken;
         user.emailVerificationExpiry = tokenExpiry;
-        await user.save({ validateBeforeSave: false });
-
+        
+        console.log("🔍 User Before Save:", user);
+        await user.validate(); // Validate before saving to check for errors
+        await user.save();
+        
         const createdUser = await User.findById(user._id).select(
-            "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
+            "-password -refreshToken "
         );
 
         if (!createdUser) {
