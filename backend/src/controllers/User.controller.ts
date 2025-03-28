@@ -206,5 +206,5 @@ const signOut = async (c: Context)=>{
 export { 
     registerUser,
     signIn,
-
+    signOut
  };
