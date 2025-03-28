@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { getRuntimeKey } from "hono/adapter";
 import { cors } from "hono/cors";
+import { registerUser } from "./controllers/User.controller";
 
-
-const app = new Hono();
+const app = new Hono()
 
 app.use(
   cors({
@@ -11,14 +11,13 @@ app.use(
     credentials: true,
   })
 )
+
+
 app.get('/',(c)=>{
-    if (getRuntimeKey()==="workerd"){
-      return c.text("You are on cloudflare ");
-    }
-    if (getRuntimeKey()==="bun"){
-      return c.text("You are on bun");
-    }
-    return c.text("Unknown runtime");
+ 
+  return c.json({"this is working fine": "true"})
   })
+
+app.post('/register',registerUser)
 
 export default app;

@@ -11,9 +11,9 @@ export const authenticateUser = async(c: Context, next:Next)=>{
     }
 
     try{
-        const decoded: any = await verify(token, process.env.JWT_SECRET as string);
+        const decoded: any = await verify(token, process.env.ACCESS_TOKEN_SECRET as string);
         const user = await User.findById(decoded?._id).select(
-            "-password -refreshToken"
+            "-password -refreshToken "
         )
         if(!user){
             return c.json({message:"Unauthorized"},401);

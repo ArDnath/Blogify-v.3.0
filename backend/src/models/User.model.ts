@@ -1,5 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
-// Replace hono/jwt with jsonwebtoken
+import { sign } from 'hono/jwt';
 
 export interface IUser extends Document {
     username: string;
@@ -8,11 +8,20 @@ export interface IUser extends Document {
     isEmailVerified: boolean;
     refreshToken?: string;
     forgotPasswordToken?: string;
-    forgotPasswordExpiry?: Date;
+    forgotPasswordExpiry?: number;
     emailVerificationToken?: string;
-    emailVerificationExpiry?: Date;
+    emailVerificationExpiry?: number;
     createdAt?: Date;
     updatedAt?: Date;
+
+
+    //Method Signatures
+    isPasswordCorrect(password: string): Promise<boolean>;generateAccessToken(): Promise<string>;generateRefreshToken(): Promise<string>;
+    generateTemporaryToken(): Promise<{
+        unHashedToken: string;
+        hashedToken: string;
+        tokenExpiry: number;
+    }>;
 }
 
 const userSchema = new Schema<IUser>({
@@ -69,8 +78,8 @@ userSchema.methods.isPasswordCorrect = async function (password:string){
 }
 
 //Generate Access Token
-userSchema.methods.generateAccessToken = async function () {
-    return jwt.sign(
+userSchema.methods.generateAccessToken = async function (): Promise<string> {
+    return sign(
         {
             _id: this._id,
             email: this.email,
@@ -81,8 +90,8 @@ userSchema.methods.generateAccessToken = async function () {
     );
 };
 
-userSchema.methods.generateRefreshToken = async function () {
-    return jwt.sign(
+userSchema.methods.generateRefreshToken = async function () : Promise<string>{
+    return sign(
         {
             _id: this._id,
             exp: Math.floor(Date.now() / 1000) + parseInt(process.env.REFRESH_TOKEN_EXPIRY || "604800"),
@@ -90,6 +99,30 @@ userSchema.methods.generateRefreshToken = async function () {
         process.env.REFRESH_TOKEN_SECRET as string
     );
 };
+
+
+
+userSchema.methods.generateTemporaryToken = function () {
+  // Generate a random token (secure & URL-safe)
+  const randomBytes = new Uint8Array(20);
+  crypto.getRandomValues(randomBytes);
+  const unHashedToken = Buffer.from(randomBytes).toString("hex");
+
+  // Hash the token using SHA-256
+  const encoder = new TextEncoder();
+  return crypto.subtle.digest("SHA-256", encoder.encode(unHashedToken))
+    .then((hashedBuffer) => {
+      const hashedToken = Array.from(new Uint8Array(hashedBuffer))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      // Token expiry time (20 minutes from now)
+      const tokenExpiry = Date.now() + (parseInt(process.env.USER_TEMPORARY_TOKEN_EXPIRY || "1200000"));
+
+      return { unHashedToken, hashedToken, tokenExpiry };
+    });
+};
+
 
 const User =model<IUser>('User',userSchema);
 
