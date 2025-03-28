@@ -1,11 +1,25 @@
 import User from "../models/User.model";
 import { Context } from "hono";
+import { deleteCookie, setSignedCookie } from "hono/cookie";
 
 interface ISignup {
     username: string;
     email: string;
     password: string;
-  }
+};
+
+  interface ISignIn{
+    username?: string;
+    email?: string;
+    password: string;
+};
+
+
+
+
+//Generate Accesstoken and Refreshtoken utility function.
+
+
 
 export const generateAccessAndRefreshToken = async (c: Context, userId: string) => {
     try {
@@ -20,11 +34,15 @@ export const generateAccessAndRefreshToken = async (c: Context, userId: string) 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
 
-        return c.json({ accessToken, refreshToken });
+        return { accessToken, refreshToken };
     } catch (error) {
         return c.json({ error: "Internal server error" }, 500);
     }
 };
+
+
+
+//SignUp Logic
 
 const registerUser = async (c: Context) => {
     try {
@@ -94,4 +112,99 @@ const registerUser = async (c: Context) => {
     }
 };
 
-export { registerUser };
+
+
+
+//SignIn Controller 
+
+const signIn = async ( c:Context) =>{
+    try {
+        const {username ,email, password} :ISignIn = await c.req.json();
+        const emailLower = email ? email.toLowerCase() : null;
+        const userNameLower = username && username.toLocaleLowerCase();
+
+
+        const user= await User.findOne({
+            $or : [{email: emailLower}, {userName: userNameLower}],
+        });
+
+        if (!user){
+            return c.json({
+                data: { message: "User not found"},
+                status: 404
+            });
+        }
+
+        const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+        if(!isPasswordCorrect){
+            return c.json({
+                data: {message : "Invalid password"},
+                status: 401
+            });
+        }
+
+        const tokens = await generateAccessAndRefreshToken(c, user._id as string);
+        if (!tokens) {
+            return c.json({ data: { message: "Failed to generate tokens" }, status: 500 });
+        }
+        const { accessToken, refreshToken } = tokens;
+        
+        const loggedInUser = await User.findById(user._id).select(
+            "-password -refreshToken -emailVerficationToken -emailVerificationExpiry"
+        );
+
+        const setCookieOptions ={
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60* 24 * 30,
+        }
+        await setSignedCookie(
+            c,
+            "auth_token",
+            accessToken,
+            process.env.ACCESS_TOKEN_SECRET as string,
+            setCookieOptions
+        )
+        
+        return c.json({
+            loggedInUser,
+            data:{message: "User is Logged in Successfully"},
+            status:200
+        })
+
+
+    } catch (error: any) {
+
+        return c.json(
+            {message: `Internal server error: ${error.message}`},
+            { status: 500}
+        )
+        
+    }
+}
+
+
+//SignOut controller
+
+
+const signOut = async (c: Context)=>{
+    try {
+        deleteCookie(c,"auth_token");
+
+        return c.json({
+            data: {message: "User logged out successfully"}
+        })
+    } catch (error: any) {
+        return  c.json(
+            {message: `Internal server error: ${error.message}`},
+            { status: 500}
+        )
+    }
+}
+
+export { 
+    registerUser,
+    signIn,
+
+ };
