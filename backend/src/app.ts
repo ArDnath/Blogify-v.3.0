@@ -1,11 +1,9 @@
 import { Hono } from "hono";
-import { getRuntimeKey } from "hono/adapter";
+import { logger } from 'hono/logger'
 import { cors } from "hono/cors";
-import {HTTPException} from "hono/http-exception";
-import { registerUser } from "./controllers/User.controller";
-import { userRouter } from "./routes/user.route";
+import authRouter  from "./routes/user.route";
 
-const app = new Hono()
+const app = new Hono().basePath('/api/v1')
 
 app.use(
   cors({
@@ -14,26 +12,22 @@ app.use(
   })
 )
 
+app.use(logger());
+
 
 app.get('/',(c)=>{
  
   return c.json({"this is working fine": "true"})
   })
 
-app.route('/',userRouter);
-app.onError(async (err, c) => {
-  if (err instanceof HTTPException) {
-      c.status(err.status)
-      return c.json({
-          errors: err.message
-      })
- 
-  } else {
-      c.status(500)
-      return c.json({
-          errors: err.message
-      })
-  }
-})
+app.route('/auth',authRouter);
+
+app.use("*",async(c)=>{
+  c.json({
+    message: "Router not found"
+  },
+404);
+
+});
 
 export default app;
