@@ -2,7 +2,7 @@ import React from 'react';
 
 const CreatePage = () => {
     return (
-        <div>
+        <div className='pt-10'>
             Write
         </div>
     );

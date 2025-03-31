@@ -117,6 +117,9 @@ const registerUser = async (c: Context) => {
 
 //SignIn Controller 
 
+
+//SignIn Controller 
+
 const signIn = async ( c:Context) =>{
     try {
         const {username ,email, password} :ISignIn = await c.req.json();
@@ -149,9 +152,8 @@ const signIn = async ( c:Context) =>{
             return c.json({ data: { message: "Failed to generate tokens" }, status: 500 });
         }
         const { accessToken, refreshToken } = tokens;
-        
         const loggedInUser = await User.findById(user._id).select(
-            "-password -refreshToken -emailVerficationToken -emailVerificationExpiry"
+            "-password -refreshToken -emailVerificationToken -emailVerificationExpiry"
         );
 
         const setCookieOptions ={
@@ -169,6 +171,7 @@ const signIn = async ( c:Context) =>{
         
         return c.json({
             loggedInUser,
+            accessToken,
             data:{message: "User is Logged in Successfully"},
             status:200
         })
@@ -183,8 +186,6 @@ const signIn = async ( c:Context) =>{
         
     }
 }
-
-
 //SignOut controller
 
 

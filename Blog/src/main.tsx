@@ -8,6 +8,8 @@ import BlogPage from './pages/BlogPage.tsx'
 import CreatePage from './pages/CreatePage.tsx'
 import LoginPage from './pages/LoginPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
+import { AuthProvider } from './utils/AuthContext.tsx'
+import ProtectedRoute from './utils/ProtectRoute.tsx'
 
 const router =createBrowserRouter([{
   element: <App/>,
@@ -22,7 +24,11 @@ const router =createBrowserRouter([{
     },
     {
       path:"/write",
-      element:<CreatePage/>
+      element:(
+        <ProtectedRoute>
+          <CreatePage />
+        </ProtectedRoute>
+      )
     },
     {
       path:"/login",
@@ -38,6 +44,8 @@ const router =createBrowserRouter([{
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   </StrictMode>,
 )
