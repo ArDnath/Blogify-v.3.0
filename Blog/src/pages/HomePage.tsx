@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import PostList from '../components/PostList';
+import Image from '../components/Image';
 
 const HomePage = () => {
     return (
@@ -16,7 +17,7 @@ const HomePage = () => {
             <div className="pt-2 space-y-3">
                 {/* Profile Image */}
                 <div className="w-40 h-40 rounded-full overflow-hidden ">
-                    <img 
+                    <Image 
                         src="./Me.png" 
                         alt="Ariyaman's Profile" 
                         className="w-full h-full object-cover"

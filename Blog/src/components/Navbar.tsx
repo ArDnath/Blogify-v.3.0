@@ -1,7 +1,7 @@
 import React from "react";
 import DarkMode from "./DarkMode";
 import { Link } from "react-router-dom";
-
+import Image from "./Image";
 const Navbar: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 dark:bg-gray-900/30 backdrop-blur-md transition-colors duration-300 px-4 sm:px-6 md:px-10">
@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link to="/">
           <div className="w-14 h-14 rounded-full overflow-hidden border border-white/50 dark:border-gray-600">
-            <img src="./Hue (1).png" alt="Logo" className="w-full h-full object-cover" />
+            <Image src="./Hue (1).png" alt="Logo" className="w-full h-full object-cover" />
           </div>
         </Link>
 
