@@ -8,7 +8,7 @@ const createPost = async (c: Context) => {
     const body = await c.req.json();
 
     // Ensure the user exists (assuming userId is sent in the request body)
-    const user = await User.findOne(body.author);
+    const user = await User.findOne(body.username);
     if (!user) {
       return c.json({ error: "User not found" }, 404);
     }
@@ -37,4 +37,6 @@ const createPost = async (c: Context) => {
 };
 
 export {
-    createPost}
+    createPost
+  }
+
