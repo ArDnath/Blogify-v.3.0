@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
 import PostList from '../components/PostList';
 import Image from '../components/Image';
 

@@ -158,8 +158,9 @@ const signIn = async ( c:Context) =>{
 
         const setCookieOptions ={
             httpOnly: true,
+            
             secure: true,
-            maxAge: 60 * 60* 24 * 30,
+            maxAge: 60 * 60* 2,
         }
         await setSignedCookie(
             c,

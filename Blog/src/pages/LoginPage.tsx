@@ -27,6 +27,7 @@ const Login = () => {
 
       const token = response.data.accessToken;
       login(token);
+      console.log(token);
       //Redirect to write Page
       navigate("/write");
 
