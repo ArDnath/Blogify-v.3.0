@@ -1,4 +1,4 @@
-import React, { useState,useCallback } from 'react';
+import { useState,useCallback } from 'react';
 import RichTextEditor from 'reactjs-tiptap-editor';
 import {
   BaseKit,
@@ -28,10 +28,11 @@ import {
   TextAlign,
   Underline,
   Video,
-} from 'reactjs-tiptap-editor/extension-bundle'
+} from 'reactjs-tiptap-editor/extension-bundle';
 
 import 'reactjs-tiptap-editor/style.css';
 import Logout from '../components/Logout';
+import { useTheme } from "../components/ThemeContext";
 
 
 const extensions = [
@@ -115,8 +116,8 @@ function debounce(func: any, wait: number) {
 
 
 const CreatePage = () => {
+  const {theme} = useTheme();
   const [content, setContent] = useState<string>(DEFAULT_CONTENT);
-  const [theme, setTheme] = useState('light')
   const [disable, setDisable] = useState(false)
 
 
@@ -128,66 +129,38 @@ const CreatePage = () => {
   )
 
 
-  const onChangeContent = (value: string) => {
-    setContent(value);
-    console.log("Editor content:", value); // Optional: see what user is typing
-  };
-
-  const handleSubmit = async () => {
-    try {
-      const res = await fetch('/api/posts/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }), // send HTML content to backend
-      });
-
-      const result = await res.json();
-      if (res.ok) {
-        alert('Blog post created successfully!');
-      } else {
-        alert(result.error || 'Something went wrong.');
-      }
-    } catch (error) {
-      console.error('Submit error:', error);
-      alert('Error submitting post');
-    }
-  };
-
   return (
-    <div>
-  <div
-    className="p-[24px] flex flex-col w-full max-w-screen-lg gap-[24px] mx-auto my-0 rounded-[16px] overflow-hidden min-h-screen"
-    style={{
-      margin: '40px auto',
-    }}
-  >
-     
-
-      <RichTextEditor
-        output="html"
-        content={content as any}
-        onChangeContent={onValueChange}
-        extensions={extensions}
-        dark={theme === 'dark'}
-        disabled={disable}
-      />
-
-      {typeof content === 'string' && (
-        <textarea
-          style={{
-            marginTop: 20,
-            height: 500,
-          }}
-          readOnly
-          value={content}
-        />
-      )}
-    </div>
-    <div>
-        <Logout />
+    <div className="min-h-screen px-4 sm:px-8 md:px-12 py-10 ">
+      <div className="max-w-screen-lg mx-auto flex flex-col gap-6">
+  
+        {/* Logout button aligned to top-right */}
+        <div className="flex justify-end">
+          <Logout />
+        </div>
+  
+        {/* RichTextEditor */}
+        
+          <RichTextEditor
+            output="json"
+            content={content as any}
+            onChangeContent={onValueChange}
+            extensions={extensions}
+            dark={theme === "night"}
+            disabled={disable}
+          />
+  
+        {/* HTML Output textarea */}
+        {(
+          <textarea
+            readOnly
+            value={JSON.stringify(content,null,2)}
+            className="w-full h-[500px] p-4 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-sm font-mono"
+          />
+        )}
       </div>
     </div>
   );
+  
 };
 
 export default CreatePage;

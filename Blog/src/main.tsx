@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import {ThemeProvider} from './components/ThemeContext.tsx'
 import HomePage from './pages/HomePage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
 import CreatePage from './pages/CreatePage.tsx'
@@ -44,8 +45,10 @@ const router =createBrowserRouter([{
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router}/>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <RouterProvider router={router}/>
+        </AuthProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

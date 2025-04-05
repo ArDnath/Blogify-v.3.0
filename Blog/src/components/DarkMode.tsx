@@ -1,24 +1,9 @@
-import React, { useEffect, useState } from "react";
-
+import React from "react";
+import { useTheme } from "./ThemeContext";
 const DarkMode: React.FC = () => {
-  const [theme, setTheme] = useState<string>("night");
+  const { theme, toggleTheme } = useTheme();
 
-  // Ensure theme is applied on mount
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme") || "night";
-    setTheme(storedTheme);
-    document.documentElement.setAttribute("data-theme", storedTheme);
-  }, []);
-
-  // Update theme whenever it changes
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "night" ? "nord" : "night"));
-  };
+  
 
   return (
     <label className="swap swap-rotate">
