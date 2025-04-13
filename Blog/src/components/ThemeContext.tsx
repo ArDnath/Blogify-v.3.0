@@ -12,13 +12,11 @@ const ThemeContext = createContext<{
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>("night");
-
-  useEffect(() => {
+  const [theme, setTheme] = useState<Theme>(() => {
     const storedTheme = (localStorage.getItem("theme") as Theme) || "night";
-    setTheme(storedTheme);
     document.documentElement.setAttribute("data-theme", storedTheme);
-  }, []);
+    return storedTheme;
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);

@@ -3,8 +3,6 @@ import { useTheme } from "./ThemeContext";
 const DarkMode: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
 
-  
-
   return (
     <label className="swap swap-rotate">
       {/* Hidden Checkbox to Control Theme */}

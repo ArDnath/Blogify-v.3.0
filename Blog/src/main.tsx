@@ -48,7 +48,7 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
       <AuthProvider>
         <RouterProvider router={router}/>
-        </AuthProvider>
+      </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 )
