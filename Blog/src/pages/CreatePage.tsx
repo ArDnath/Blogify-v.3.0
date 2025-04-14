@@ -1,16 +1,11 @@
-
-import Logout from '../components/Logout';
-import { useTheme } from "../components/ThemeContext";
-
+import Logout from "../components/Logout";
+import RichEditor from "../components/RichEditor";
 
 const CreatePage = () => {
-  const {theme} = useTheme();
-
-
   return (
     <div className="min-h-screen px-4 sm:px-8 md:px-12 py-10 ">
       <div className="max-w-screen-lg mx-auto flex flex-col gap-6">
-  
+        <RichEditor />
         {/* Logout button aligned to top-right */}
         <div className="flex justify-end">
           <Logout />
@@ -18,7 +13,6 @@ const CreatePage = () => {
       </div>
     </div>
   );
-  
 };
 
 export default CreatePage;
