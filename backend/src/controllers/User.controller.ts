@@ -148,6 +148,7 @@ const signIn = async ( c:Context) =>{
         }
 
         const tokens = await generateAccessAndRefreshToken(c, user._id as string);
+        
         if (!tokens) {
             return c.json({ data: { message: "Failed to generate tokens" }, status: 500 });
         }

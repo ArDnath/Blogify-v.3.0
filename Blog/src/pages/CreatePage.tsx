@@ -1,5 +1,6 @@
 import Logout from "../components/Logout";
-import RichEditor from "../components/RichEditor";
+import RichEditor from "../components/RichEditor/index";
+import axios from "axios";
 
 const CreatePage = () => {
   return (

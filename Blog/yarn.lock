@@ -1088,11 +1088,6 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-character-count/-/extension-character-count-2.11.7.tgz#a688da9f575967cf5fcc7d045c57ce4157f0ed22"
   integrity sha512-gcVbKou+uxzg8N0BBKceLwtpWvN8g2TIjTuCdyAcAPukX63DqVWOkofFHn1RqZbstJmtF4pTGZs9OH/GJrp27Q==
 
-"@tiptap/extension-code-block@^2.11.7":
-  version "2.11.7"
-  resolved "https://registry.yarnpkg.com/@tiptap/extension-code-block/-/extension-code-block-2.11.7.tgz#1aaaadd231317a0e1277aa987854a077cb83f0f7"
-  integrity sha512-To/y/2H04VWqiANy53aXjV7S6fA86c2759RsH1hTIe57jA1KyE7I5tlAofljOLZK/covkGmPeBddSPHGJbz++Q==
-
 "@tiptap/extension-code@^2.11.7":
   version "2.11.7"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-code/-/extension-code-2.11.7.tgz#d9cb080992080d3a576482d8beee280d29d8a9df"
@@ -1301,33 +1296,6 @@
     "@types/use-sync-external-store" "^0.0.6"
     fast-deep-equal "^3"
     use-sync-external-store "^1"
-
-"@tiptap/starter-kit@^2.11.7":
-  version "2.11.7"
-  resolved "https://registry.yarnpkg.com/@tiptap/starter-kit/-/starter-kit-2.11.7.tgz#fd7f2c0021d5cd913afe289eb211b196cf509caf"
-  integrity sha512-K+q51KwNU/l0kqRuV5e1824yOLVftj6kGplGQLvJG56P7Rb2dPbM/JeaDbxQhnHT/KDGamG0s0Po0M3pPY163A==
-  dependencies:
-    "@tiptap/core" "^2.11.7"
-    "@tiptap/extension-blockquote" "^2.11.7"
-    "@tiptap/extension-bold" "^2.11.7"
-    "@tiptap/extension-bullet-list" "^2.11.7"
-    "@tiptap/extension-code" "^2.11.7"
-    "@tiptap/extension-code-block" "^2.11.7"
-    "@tiptap/extension-document" "^2.11.7"
-    "@tiptap/extension-dropcursor" "^2.11.7"
-    "@tiptap/extension-gapcursor" "^2.11.7"
-    "@tiptap/extension-hard-break" "^2.11.7"
-    "@tiptap/extension-heading" "^2.11.7"
-    "@tiptap/extension-history" "^2.11.7"
-    "@tiptap/extension-horizontal-rule" "^2.11.7"
-    "@tiptap/extension-italic" "^2.11.7"
-    "@tiptap/extension-list-item" "^2.11.7"
-    "@tiptap/extension-ordered-list" "^2.11.7"
-    "@tiptap/extension-paragraph" "^2.11.7"
-    "@tiptap/extension-strike" "^2.11.7"
-    "@tiptap/extension-text" "^2.11.7"
-    "@tiptap/extension-text-style" "^2.11.7"
-    "@tiptap/pm" "^2.11.7"
 
 "@tiptap/suggestion@^2.11.7":
   version "2.11.7"
