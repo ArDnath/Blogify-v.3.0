@@ -36,7 +36,4 @@ const createPost = async (c: Context) => {
   }
 };
 
-export {
-    createPost
-  }
-
+export { createPost };
