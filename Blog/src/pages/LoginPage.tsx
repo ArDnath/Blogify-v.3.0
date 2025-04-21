@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../utils/AuthContext";
-
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -22,17 +20,19 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/v1/auth/signin",
-        { email, password }, 
+        { email, password },
       );
 
+      console.log(response);
+
       const token = response.data.accessToken;
-      login(token);
+      if (!token) throw new Error("AccessToken not returned from server");
+
       console.log(token);
+      login(token);
       //Redirect to write Page
       navigate("/write");
-
-      
-    } catch (error : any) {
+    } catch (error: any) {
       console.error("LoginError:", error);
       setError(error.respons?.data?.data?.message || "an error occured");
     } finally {
@@ -119,7 +119,7 @@ const Login = () => {
             type="submit"
             className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700"
           >
-          {loading ?"Signing in...": "SignIn"}
+            {loading ? "Signing in..." : "SignIn"}
           </button>
         </form>
       </div>

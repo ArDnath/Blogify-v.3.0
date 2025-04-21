@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { logger } from 'hono/logger'
 import { cors } from "hono/cors";
-import Userroutes  from "./routes/user.route";
-import blogRoutes from "./routes/Blog.route"
+import authRouter  from "./routes/user.route";
+import BlogRouter from "./routes/Blog.route"
 
 const app = new Hono().basePath('/api/v1')
 
@@ -22,8 +22,8 @@ app.get('/',(c)=>{
   })
 
 
-app.route('/auth',Userroutes);
-app.route('/post',blogRoutes)
+app.route('/auth',authRouter);
+app.route('/post',BlogRouter)
 
 app.use("*",async(c)=>{
   c.json({

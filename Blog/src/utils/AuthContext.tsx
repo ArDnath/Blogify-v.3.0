@@ -2,10 +2,10 @@ import React, { createContext, useContext, useState } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  token: string | null;
   login: (token: string) => void;
   logout: () => void;
 }
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -13,21 +13,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check if user was previously authenticated (use sessionStorage or localStorage)
     return sessionStorage.getItem("auth") === "true";
   });
+  const [token, setToken] = useState<string | null>(() => sessionStorage.getItem("token"));
+  
 
   const login = (token: string) => {
     setIsAuthenticated(true);
-    sessionStorage.setItem("auth", "true"); // Store auth state
-    sessionStorage.setItem("token", token); // Store token securely (consider HTTP-only cookies for production)
+    setToken(token);
+    sessionStorage.setItem("auth", "true");
+    sessionStorage.setItem("token", token);
   };
-
+  
   const logout = () => {
     setIsAuthenticated(false);
+    setToken(null);
     sessionStorage.removeItem("auth");
     sessionStorage.removeItem("token");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
