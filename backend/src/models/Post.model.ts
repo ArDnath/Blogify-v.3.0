@@ -4,6 +4,7 @@ interface IBlogs extends Document{
 
     title: string;
     description: string;
+    content: string; // New field
     author: Types.ObjectId;
     images: string;
 }
@@ -19,6 +20,10 @@ const blogSchema = new Schema(
     description: {
       type: String,
       required: [true, "Blog description required"],
+    },
+    content: {
+      type: String,
+      required: [true, "Blog content required"], // New field
     },
     slug: {
       type: String,

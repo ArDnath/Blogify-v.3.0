@@ -21,9 +21,14 @@ const createPost = async (c: Context) => {
       counter++;
     }
 
-    const newPost = new Blog({ author: user._id, slug, ...body });
+    const newPost = new Blog({
+      author: user._id,
+      slug,
+      title: body.title,
+      description: body.description,
+      content: body.content, // New field
+    });
     const post = await newPost.save();
-
 
     return c.json({ message: "Post created successfully", post }, 201);
   } catch (error) {
@@ -57,7 +62,9 @@ const getAllPosts = async (c: Context) => {
 const getPostBySlug = async (c: Context) => {
   try {
     const { slug } = c.req.param();
-    const post = await Blog.findOne({ slug }).populate("author", "username email").select("title description createdAt");
+    const post = await Blog.findOne({ slug })
+      .populate("author", "username email")
+      .select("title description content createdAt"); // Include content
     if (!post) {
       return c.json({ error: "Post not found" }, 404);
     }

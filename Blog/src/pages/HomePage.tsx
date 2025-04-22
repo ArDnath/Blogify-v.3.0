@@ -42,35 +42,32 @@ const HomePage = () => {
         {/* Text Content */}
         <div className="md:text-left">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">
-            Hey! This is <span className='font-bold'>Ariyaman Debnath</span> 
+            Hi, I am <span className='font-bold'>Ariyaman Debnath</span> 
           </h1>
           <p className="mt-6 text-lg sm:text-xl leading-relaxed">
-            I'm a full-stack software engineer passionate about building stuff
-            and learning new technologies. I write blogs and articles about
-            programming, software engineering, and life. 
+
+            I am a FullStack Developer living in India. I have a passion for 
+            building, from writing the first line of code to deploying it to
+            some server across the globe, it all feels like magic with logic!!
+            
+
             <br/>
-            <span className='text-gray-400'>Currently, I'm working
-            on a project called <strong>"Blog"</strong> where I share insights
-            and experiences in software development.</span>
+            <span className="block mt-4 text-gray-400">
+    Currently messing with{" "}
+    <span className="text-blue-400 font-semibold animate-pulse">Reactjs</span>,{" "}
+    <span className="text-pink-400 font-semibold animate-pulse">Honojs</span>, and{" "}
+    <span className="text-yellow-400 font-semibold animate-pulse">Typescript</span>⚡
+  </span>
           </p>
         </div>
         
         {/* Blog Posts */}
-        <h1 className="text-3xl font-bold">Blogs</h1>
-        {posts.map((post) => (
-          <div key={post._id} className="border-b pb-4">
-            <Link to={`/blog/${post.slug}`} className="text-2xl font-semibold">
-              {post.title}
-            </Link>
-            <p className="text-sm text-gray-500">
-              Published on {new Date(post.createdAt).toLocaleDateString()}
-            </p>
-            <div
-              className="text-gray-600"
-              dangerouslySetInnerHTML={{ __html: post.description.substring(0, 100) + "..." }}
-            />
-          </div>
-        ))}
+        <h1 className="text-4xl font-bold border-b-3 pt-4 pb-4 mb-5">Blog Posts</h1>
+
+        <div>
+          <PostList />
+        </div>
+        
       </div>
     </div>
   );
