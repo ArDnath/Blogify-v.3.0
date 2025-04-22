@@ -4,15 +4,12 @@ import User from "../models/User.model";
 
 const createPost = async (c: Context) => {
   try {
-    // Get request body
-    const body = await c.req.json();
-
-    // Ensure the user exists (assuming userId is sent in the request body)
-    const user = await User.findOne(body.username);
+    const user = c.get("user");
     if (!user) {
       return c.json({ error: "User not found" }, 404);
     }
 
+    const body = await c.req.json();
     // Generate a unique slug
     let slug = body.title.replace(/ /g, "-").toLowerCase();
     let existingPost = await Blog.findOne({ slug });
