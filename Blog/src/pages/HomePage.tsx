@@ -54,15 +54,15 @@ const HomePage = () => {
             <br/>
             <span className="block mt-4 text-gray-400">
     Currently messing with{" "}
-    <span className="text-blue-400 font-semibold animate-pulse">Reactjs</span>,{" "}
-    <span className="text-pink-400 font-semibold animate-pulse">Honojs</span>, and{" "}
-    <span className="text-yellow-400 font-semibold animate-pulse">Typescript</span>⚡
+    <span className="text-green-400 font-semibold animate-pulse">Reactjs</span>,{" "}
+    <span className="text-orange-400 font-semibold animate-pulse">Honojs</span>, and{" "}
+    <span className="text-blue-400 font-semibold animate-pulse">Typescript</span>⚡
   </span>
           </p>
         </div>
         
         {/* Blog Posts */}
-        <h1 className="text-4xl font-bold border-b-3 pt-4 pb-4 mb-5">Blog Posts</h1>
+        <h1 className="text-4xl font-bold border-b-4 pt-4 pb-4 ">Blog Posts :</h1>
 
         <div>
           <PostList />

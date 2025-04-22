@@ -3,23 +3,48 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const BlogPage = () => {
-  const { slug } = useParams();
-  const [post, setPost] = useState(null);
+  const { slug } = useParams(); // Extract slug from URL
+  interface Post {
+    title: string;
+    createdAt: string;
+    img?: string;
+    description: string;
+    content?: string;
+  }
+
+  const [post, setPost] = useState<Post | null>(null); // State to store the blog post
+  const [loading, setLoading] = useState(true); // State to manage loading
+  const [error, setError] = useState(""); // State to manage errors
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        setLoading(true); // Start loading
         const response = await axios.get(`http://localhost:8080/api/v1/post/${slug}`);
-        setPost(response.data.post);
-      } catch (error) {
-        console.error("Error fetching post:", error);
+        if (response.data && response.data.post) {
+          setPost(response.data.post); // Set the fetched post
+        } else {
+          setError("Post not found."); // Handle missing post in response
+        }
+      } catch (err) {
+        setError("Error fetching post. Please try again later."); // Handle errors
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
     fetchPost();
   }, [slug]);
 
+  if (loading) {
+    return <div className="text-center mt-10">Loading...</div>; // Show loading state
+  }
+
+  if (error) {
+    return <div className="text-center mt-10 text-red-500">{error}</div>; // Show error message
+  }
+
   if (!post) {
-    return <div>Loading...</div>;
+    return <div className="text-center mt-10">Post not found.</div>; // Handle case where post is not found
   }
 
   return (
@@ -28,10 +53,23 @@ const BlogPage = () => {
       <p className="text-sm text-gray-500">
         Published on {new Date(post.createdAt).toLocaleDateString()}
       </p>
+      {post.img && (
+        <img
+          src={post.img}
+          alt={post.title}
+          className="w-full h-auto rounded-lg mt-4"
+        />
+      )}
       <div
-        className="text-gray-600 mt-4"
+        className="text-gray-500 mt-4"
         dangerouslySetInnerHTML={{ __html: post.description }}
       />
+      {post.content && (
+        <div
+          className=" mt-6"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
+      )}
     </div>
   );
 };
