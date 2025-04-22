@@ -8,7 +8,7 @@ import { authenticateUser } from "../middlewares/auth.middleware";
 
 const router = new Hono();
 
-router.post("/create",authenticateUser,createPost);
+router.post("/create", authenticateUser, createPost);
 router.get("/all", getAllPosts);
 router.get("/:slug", getPostBySlug); // Add route for fetching a post by slug
 

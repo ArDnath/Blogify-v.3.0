@@ -34,8 +34,20 @@ const createPost = async (c: Context) => {
 
 const getAllPosts = async (c: Context) => {
   try {
-    const posts = await Blog.find({}, { description: 1, title: 1, slug: 1, createdAt: 1 });
-    return c.json({ posts }, 200);
+    const page = Number(c.req.query("page")) || 1;
+    const limit = Number(c.req.query("limit")) || 2;
+
+
+    const posts = await Blog.find()
+    .limit(limit)
+    .skip((page -1) * limit)
+    .sort({createdAt: -1});
+
+    const totalPosts = await Blog.countDocuments();
+    const hasMore = page* limit < totalPosts;
+    
+    return c.json({ posts, hasMore }, 200);
+
   } catch (error) {
     console.error("Error fetching posts:", error);
     return c.json({ error: "Internal server error" }, 500);
