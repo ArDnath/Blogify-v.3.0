@@ -27,13 +27,15 @@ function RichEditor({ content, setContent }: RichEditorProps) {
   );
 
   return (
-    <RichTextEditor
+   <div>
+     <RichTextEditor
       output="html"
       content={content}
       onChangeContent={onValueChange}
       extensions={extensions}
       dark={editorTheme === "dark"} // Use editorTheme here
     />
+   </div>
   );
 }
 

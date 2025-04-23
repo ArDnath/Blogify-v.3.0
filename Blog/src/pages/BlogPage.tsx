@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import "reactjs-tiptap-editor/style.css";
 
 const BlogPage = () => {
   const { slug } = useParams(); // Extract slug from URL
@@ -20,7 +21,9 @@ const BlogPage = () => {
     const fetchPost = async () => {
       try {
         setLoading(true); // Start loading
-        const response = await axios.get(`http://localhost:8080/api/v1/post/${slug}`);
+        const response = await axios.get(
+          `http://localhost:8080/api/v1/post/${slug}`,
+        );
         if (response.data && response.data.post) {
           setPost(response.data.post); // Set the fetched post
         } else {
@@ -49,8 +52,8 @@ const BlogPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-4xl font-bold">{post.title}</h1>
-      <p className="text-sm text-gray-500">
+      <h1 className="text-4xl font-bold pt-5">{post.title}</h1>
+      <p className="text-sm ">
         Published on {new Date(post.createdAt).toLocaleDateString()}
       </p>
       {post.img && (
@@ -61,14 +64,15 @@ const BlogPage = () => {
         />
       )}
       <div
-        className="text-gray-500 mt-4"
+        className=" pb-1.5 mt-4 mb-8"
         dangerouslySetInnerHTML={{ __html: post.description }}
       />
       {post.content && (
         <div
-          className=" mt-6"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
+        className="ProseMirror prose dark:prose-invert max-w-none"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      />
+      
       )}
     </div>
   );
