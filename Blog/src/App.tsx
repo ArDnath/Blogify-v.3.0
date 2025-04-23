@@ -1,15 +1,18 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import { Outlet } from 'react-router-dom'
-
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import FooterComponent from "./components/Footer";
 
 function App() {
   return (
-    <div className="px-4 md:px-8 lg:px-16 lx:px-32 2xl:px-64 pt-20">
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <Outlet />
+      <main className="flex-grow px-4 md:px-8 lg:px-16 lx:px-32 2xl:px-64 pt-20">
+        <Outlet />
+      </main>
+      <FooterComponent />
     </div>
   );
 }
 
-export default App
+export default App;

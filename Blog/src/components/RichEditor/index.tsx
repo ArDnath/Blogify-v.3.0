@@ -14,11 +14,11 @@ interface RichEditorProps {
 }
 
 function RichEditor({ content, setContent }: RichEditorProps) {
-  const [editorTheme, setEditorTheme] = useState(""); // Define editorTheme state
+  const [editorTheme, setEditorTheme] = useState("");
   const { theme } = useTheme();
 
   useEffect(() => {
-    setEditorTheme(theme === "nord" ? "light" : "dark"); // Update editorTheme based on theme
+    setEditorTheme(theme === "nord" ? "light" : "dark"); 
   }, [theme]);
 
   const onValueChange = useCallback(
@@ -33,7 +33,7 @@ function RichEditor({ content, setContent }: RichEditorProps) {
       content={content}
       onChangeContent={onValueChange}
       extensions={extensions}
-      dark={editorTheme === "dark"} // Use editorTheme here
+      dark={editorTheme === "dark"} 
     />
    </div>
   );
