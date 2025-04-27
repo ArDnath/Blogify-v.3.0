@@ -1,0 +1,9 @@
+# Instructions args
+
+FROM oven/bun:latest AS backend-build
+
+WORKDIR /app
+
+COPY ./backend/package.json ./backend/bun.lockb ./
+
+RUN bun install
