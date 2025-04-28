@@ -1,9 +1,14 @@
-# Instructions args
 
-FROM oven/bun:latest AS backend-build
+FROM oven/bun:alpine AS backend-build
 
 WORKDIR /app
 
-COPY ./backend/package.json ./backend/bun.lockb ./
+COPY . .
 
-RUN bun install
+RUN bun install --no-save --frozen-lockfile
+RUN bun run build
+
+
+EXPOSE 3000
+
+CMD [ "bun", "dist/index.js" ]
