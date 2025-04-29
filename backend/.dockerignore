@@ -1,6 +1,5 @@
 node_modules
-*.log
 .git
-.gitignore
-README.md
-tsconfig.json
+dist
+Dockerfile
+*.log
