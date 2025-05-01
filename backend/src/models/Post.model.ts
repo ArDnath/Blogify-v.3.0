@@ -30,9 +30,11 @@ const blogSchema = new Schema(
       required:true,
       unique:true,
     },
-    images: {
-        type:String
-      },
+    image: { 
+      type: String, 
+      required: true 
+    },
+
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",

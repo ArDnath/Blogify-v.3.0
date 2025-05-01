@@ -2,11 +2,18 @@ import Logout from "../components/Logout";
 import RichEditor from "../components/RichEditor/index";
 import axios from "axios";
 import { useState } from "react";
+import Upload from "../components/Upload"; 
+
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [progress, setProgress] = useState(0);
+  const [imagePreview, setImagePreview] = useState("");
+
+
 
   const handleSubmit = async () => {
     try {
@@ -18,7 +25,7 @@ const CreatePage = () => {
 
       await axios.post(
         "http://localhost:8080/api/v1/post/create",
-        { title, description, content },
+        { title, description, content , image: imageUrl},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,6 +46,25 @@ const CreatePage = () => {
   return (
     <div className="min-h-screen px-4 sm:px-8 md:px-12 py-10 ">
       <div className="max-w-screen-lg mx-auto flex flex-col gap-6">
+      <Upload
+  type="image"
+  setProgress={setProgress}
+  setData={setImageUrl}
+  setPreview={setImagePreview}
+>
+  <div className="text-white bg-blue-600 px-4 py-2 rounded-md inline-block cursor-pointer">
+    {imageUrl ? "Change Image" : "Upload Image"}
+  </div>
+</Upload>
+
+{imagePreview && (
+  <img
+    src={imagePreview}
+    alt="Preview"
+    className="mt-4 w-32 h-32 object-cover rounded-md border"
+  />
+)}
+
         <input
           placeholder="Title"
           value={title}

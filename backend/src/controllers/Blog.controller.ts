@@ -1,6 +1,8 @@
 import { Context } from "hono";
 import Blog from "../models/Post.model";
 import User from "../models/User.model";
+import ImageKit from "imagekit";
+
 
 const createPost = async (c: Context) => {
   try {
@@ -26,7 +28,8 @@ const createPost = async (c: Context) => {
       slug,
       title: body.title,
       description: body.description,
-      content: body.content, // New field
+      content: body.content, 
+      image: body.image,
     });
     const post = await newPost.save();
 
@@ -74,10 +77,21 @@ const getPostBySlug = async (c: Context) => {
     return c.json({ error: "Internal server error" }, 500);
   }
 };
+const imagekit = new ImageKit({
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+});
+
+const uploadAuth = async (c:Context) => {
+  const result = imagekit.getAuthenticationParameters();
+  c.text(result);
+};
 
 export {
   createPost,
   getAllPosts,
   getPostBySlug,
+  uploadAuth,
 };
 
