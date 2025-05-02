@@ -1,8 +1,7 @@
 import { Context } from "hono";
 import Blog from "../models/Post.model";
 import User from "../models/User.model";
-import ImageKit from "imagekit";
-
+const ImageKit = require("imagekit")
 
 const createPost = async (c: Context) => {
   try {
@@ -85,7 +84,7 @@ const imagekit = new ImageKit({
 
 const uploadAuth = async (c:Context) => {
   const result = imagekit.getAuthenticationParameters();
-  c.text(result);
+  return c.json(result);
 };
 
 export {

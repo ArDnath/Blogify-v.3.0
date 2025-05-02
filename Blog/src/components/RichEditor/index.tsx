@@ -4,7 +4,7 @@ import "reactjs-tiptap-editor/style.css";
 import "katex/dist/katex.min.css";
 import "easydrawer/styles.css";
 
-import { useTheme } from "../ThemeContext";
+import { useTheme } from "../ui/ThemeContext";
 import extensions from "./extensions";
 import { debounce } from "./constants";
 

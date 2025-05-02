@@ -2,7 +2,7 @@ import Logout from "../components/Logout";
 import RichEditor from "../components/RichEditor/index";
 import axios from "axios";
 import { useState } from "react";
-import Upload from "../components/Upload"; 
+import Upload from "../components/IKHandlers/UploadProvider"; 
 
 
 const CreatePage = () => {

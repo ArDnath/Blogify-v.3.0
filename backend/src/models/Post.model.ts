@@ -1,10 +1,10 @@
-import {model, Schema, Document, Types} from "mongoose";
+import {model, Schema, Types} from "mongoose";
 
-interface IBlogs extends Document{
-
+interface IBlogs {
+    _id:Types.ObjectId;
     title: string;
     description: string;
-    content: string; // New field
+    content: string; 
     author: Types.ObjectId;
     images: string;
 }
@@ -23,7 +23,7 @@ const blogSchema = new Schema(
     },
     content: {
       type: String,
-      required: [true, "Blog content required"], // New field
+      required: [true, "Blog content required"],
     },
     slug: {
       type: String,

@@ -10,7 +10,7 @@ import { authenticateUser } from "../middlewares/auth.middleware";
 
 const router = new Hono();
 
-router.get("/uploadAuth",authenticateUser,uploadAuth);
+router.get("/uploadAuth",uploadAuth);
 
 router.post("/create", authenticateUser, createPost);
 router.get("/all", getAllPosts);

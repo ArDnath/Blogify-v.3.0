@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import PostList from '../components/PostList';
-import Image from '../components/Image';
+import Image from '../components/IKHandlers/Image';
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);

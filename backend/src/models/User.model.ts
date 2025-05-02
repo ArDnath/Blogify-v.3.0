@@ -1,7 +1,7 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose,{ Schema, model , models} from 'mongoose';
 import { sign } from 'hono/jwt';
 
-export interface IUser extends Document {
+export interface IUser {
     username: string;
     email: string;
     password: string;
@@ -11,6 +11,7 @@ export interface IUser extends Document {
     forgotPasswordExpiry?: number;
     emailVerificationToken?: string;
     emailVerificationExpiry?: number;
+    _id?: mongoose.Types.ObjectId;
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -64,7 +65,7 @@ const userSchema = new Schema<IUser>({
     timestamps:true,
 });
 
-userSchema.pre<IUser>("save", async function(next){
+userSchema.pre("save", async function(next){
     if(!this.isModified("password")) return next();
     this.password = await Bun.password.hash(this.password, {
         algorithm: 'bcrypt',
@@ -124,6 +125,6 @@ userSchema.methods.generateTemporaryToken = function () {
 };
 
 
-const User =model<IUser>('User',userSchema);
+const User =models?.User || model<IUser>('User',userSchema);
 
 export default User;
