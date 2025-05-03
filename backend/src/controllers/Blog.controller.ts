@@ -66,7 +66,7 @@ const getPostBySlug = async (c: Context) => {
     const { slug } = c.req.param();
     const post = await Blog.findOne({ slug })
       .populate("author", "username email")
-      .select("title description content createdAt"); // Include content
+      .select("title description imageUrl content createdAt"); 
     if (!post) {
       return c.json({ error: "Post not found" }, 404);
     }
