@@ -27,8 +27,8 @@ const createPost = async (c: Context) => {
       slug,
       title: body.title,
       description: body.description,
-      content: body.content, 
-      image: body.image,
+      content: body.content,
+      imageUrl: body.imageUrl,
     });
     const post = await newPost.save();
 

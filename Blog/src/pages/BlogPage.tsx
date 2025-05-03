@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "reactjs-tiptap-editor/style.css";
+import Image from "../components/IKHandlers/Image";
 
 const BlogPage = () => {
   const { slug } = useParams(); // Extract slug from URL
   interface Post {
     title: string;
     createdAt: string;
-    img?: string;
+    imageUrl?: string;
     description: string;
     content?: string;
   }
@@ -56,9 +57,9 @@ const BlogPage = () => {
       <p className="text-sm ">
         Published on {new Date(post.createdAt).toLocaleDateString()}
       </p>
-      {post.img && (
-        <img
-          src={post.img}
+      {post.imageUrl && (
+        <Image
+          src={post.imageUrl}
           alt={post.title}
           className="w-full h-auto rounded-lg mt-4"
         />

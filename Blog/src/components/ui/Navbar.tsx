@@ -1,7 +1,7 @@
 import React from "react";
 import DarkMode from "./DarkMode";
 import { Link } from "react-router-dom";
-import Image from "./IKHandlers/Image";
+import Image from "../IKHandlers/Image";
 const Navbar: React.FC = () => {
   return (
     <nav className="fixed top-0 left-0 w-full z-50 dark:bg-gray-900/30 backdrop-blur-md transition-colors duration-300 px-4 sm:px-6 md:px-10">

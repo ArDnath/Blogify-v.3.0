@@ -1,4 +1,4 @@
-import {model, Schema, Types} from "mongoose";
+import {model, Schema, Types, models} from "mongoose";
 
 interface IBlogs {
     _id:Types.ObjectId;
@@ -6,7 +6,7 @@ interface IBlogs {
     description: string;
     content: string; 
     author: Types.ObjectId;
-    images: string;
+    imageUrl: string;
 }
 
 const blogSchema = new Schema(
@@ -30,7 +30,7 @@ const blogSchema = new Schema(
       required:true,
       unique:true,
     },
-    image: { 
+    imageUrl: { 
       type: String, 
       required: true 
     },
@@ -46,6 +46,6 @@ const blogSchema = new Schema(
   }
 );
 
-const Blog = model<IBlogs>("Blog", blogSchema);
+const Blog =models?.Blog|| model<IBlogs>("Blog", blogSchema);
 
 export default Blog;

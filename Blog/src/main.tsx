@@ -12,6 +12,8 @@ import NotFoundPage from './pages/NotFoundPage.tsx'
 import { AuthProvider } from './utils/AuthContext.tsx'
 import ProtectedRoute from './utils/ProtectRoute.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import UploadProvider from './components/IKHandlers/UploadProvider.tsx'
+import { NotificationProvider } from './components/Notification.tsx'
 
 const queryClient = new QueryClient();
 
@@ -30,7 +32,7 @@ const router =createBrowserRouter([{
       path:"/write",
       element:(
         <ProtectedRoute>
-          <CreatePage />
+            <CreatePage />
         </ProtectedRoute>
       )
     },
@@ -48,12 +50,17 @@ const router =createBrowserRouter([{
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
+    <NotificationProvider>
+      <UploadProvider>
+      <ThemeProvider>
       <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
       </AuthProvider>
     </ThemeProvider>
+      </UploadProvider>
+    
+    </NotificationProvider>
   </StrictMode>,
 )

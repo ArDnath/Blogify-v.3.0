@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Image from "./IKHandlers/Image";
 
 interface Post {
-  img?: string;
+  imageUrl?: string;
   slug: string;
   title: string;
   createdAt: string;
@@ -18,9 +18,9 @@ interface PostListItemsProps {
 const PostListItems: React.FC<PostListItemsProps> = ({ post, isLast }) => {
   return (
     <div className={`flex flex-col xl:flex-row gap-8 ${!isLast ? "border-b-1" : ""} py-8`}>
-      {post.img && (
+      {post.imageUrl && (
         <div className="md:hidden xl:block xl:w-1/3">
-          <Image src={post.img} className="rounded-2xl object-cover" w="735" />
+          <Image src={post.imageUrl} className="rounded-2xl object-cover" w="735" />
         </div>
       )}
 
