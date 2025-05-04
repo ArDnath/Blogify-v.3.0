@@ -23,12 +23,10 @@ const Login = () => {
         { email, password },
       );
 
-      console.log(response);
 
       const token = response.data.accessToken;
       if (!token) throw new Error("AccessToken not returned from server");
 
-      console.log(token);
       login(token);
       //Redirect to write Page
       navigate("/write");

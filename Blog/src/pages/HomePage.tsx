@@ -31,7 +31,9 @@ const HomePage = () => {
       {/* Main Content */}
       <div className="pt-2 space-y-3">
         {/* Profile Image */}
-        
+        <div className="w-35 h-35 shadow-2xl rounded-full overflow-hidden  ">
+            <Image src="./Me.png" alt="Logo" className="w-full h-full object-cover" />
+          </div>
         
         {/* Text Content */}
         <div className="md:text-left">

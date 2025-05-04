@@ -5,8 +5,7 @@ import { decode, sign, verify } from "hono/jwt";
 export const authenticateUser = async (c: Context, next: Next) => {
   const authHeader = c.req.header("Authorization") || "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-  console.log("Authorization header:", authHeader);
-  console.log("Extracted token:", token);
+  
 
   if (!token) {
     return c.json({ message: "Unauthorized: user not found" }, 401);
@@ -26,7 +25,6 @@ export const authenticateUser = async (c: Context, next: Next) => {
     c.set("user", user);
     await next();
   } catch (err) {
-    console.log("Auth Middleware Error: ", err);
     return c.json({ message: "Invalid token" }, 401);
   }
 };
