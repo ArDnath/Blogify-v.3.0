@@ -54,7 +54,7 @@ const registerUser = async (c: Context) => {
       };
     }
 
-    console.log(email);
+    
 
     // Check if user already exists
     const existedUser = await User.findOne({
@@ -85,7 +85,7 @@ const registerUser = async (c: Context) => {
     user.emailVerificationToken = hashedToken;
     user.emailVerificationExpiry = tokenExpiry;
 
-    console.log("🔍 User Before Save:", user);
+  
     await user.validate(); // Validate before saving to check for errors
     await user.save();
 
