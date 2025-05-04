@@ -32,7 +32,7 @@ const PostListItems: React.FC<PostListItemsProps> = ({ post, isLast }) => {
           <span>Published on {new Date(post.createdAt).toLocaleDateString()}</span>
         </div>
         <p
-          className="text-gray-600 mt-5"
+          className="mt-5"
           dangerouslySetInnerHTML={{ __html: post.description }}
         ></p>
         <Link to={`/blog/${post.slug}`} className="underline text-blue-800 text-sm">

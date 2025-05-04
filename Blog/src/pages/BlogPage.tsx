@@ -55,9 +55,9 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto">
       {post.imageUrl && (
-        <div className="flex justify-center mt-0">
+        <div className="flex justify-center">
         <Image
           src={post.imageUrl}
           alt={post.title}

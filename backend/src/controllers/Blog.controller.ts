@@ -1,7 +1,12 @@
 import { Context } from "hono";
 import Blog from "../models/Post.model";
 import User from "../models/User.model";
-const ImageKit = require("imagekit")
+import { JSDOM } from "jsdom";
+const ImageKit = require("imagekit");
+const createDOMPurify = require("dompurify");
+
+
+
 
 const createPost = async (c: Context) => {
   try {
@@ -9,6 +14,9 @@ const createPost = async (c: Context) => {
     if (!user) {
       return c.json({ error: "User not found" }, 404);
     }
+
+    const window = new JSDOM("").window;
+    const DOMPurifyInstance = createDOMPurify(window);
 
     const body = await c.req.json();
     // Generate a unique slug
@@ -21,13 +29,15 @@ const createPost = async (c: Context) => {
       existingPost = await Blog.findOne({ slug });
       counter++;
     }
+    
+    const sanitizedContent = DOMPurifyInstance.sanitize(body.content);
 
     const newPost = new Blog({
       author: user._id,
       slug,
       title: body.title,
       description: body.description,
-      content: body.content,
+      content: sanitizedContent,
       imageUrl: body.imageUrl,
     });
     const post = await newPost.save();
