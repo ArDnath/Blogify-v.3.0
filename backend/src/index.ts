@@ -1,5 +1,7 @@
 import app from "./app";
 import connectDB from "./db/connect";
+import "dotenv/config";
+
 
 
 connectDB()
