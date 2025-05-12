@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import axios, { AxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import "reactjs-tiptap-editor/style.css";
 import Image from "../components/IKHandlers/Image";
+import DOMPurify from "dompurify";
+
 
 interface Post {
   title: string;
@@ -12,42 +15,39 @@ interface Post {
   content?: string;
 }
 
+const fetchPost = async (slug: string): Promise<Post> => {
+  const response = await axios.get<{ post: Post }>(
+    `https://apibunhono-production.up.railway.app/api/v1/post/${slug}`
+  );
+  if (!response.data?.post) throw new Error("Post not found");
+  return response.data.post;
+};
 const BlogPage: React.FC = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<Post | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+  const { slug } = useParams<{ slug: string }>();;
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get<{ post: Post }>(
-          `http://localhost:8080/api/v1/post/${slug}`
-        );
-        setPost(response.data?.post || null);
-        if (!response.data?.post) {
-          setError("Post not found.");
-        }
-      } catch (err) {
-        const axiosError = err as AxiosError;
-        setError(
-          axiosError.response?.data?.message || "Error fetching post. Please try again later."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    data: post,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["post", slug],
+    queryFn: () => fetchPost(slug!),
+    enabled: !!slug,
+    staleTime: 1000 * 60 * 10, // 10 mins
+    gcTime: 1000 * 60 * 60, // 1 hour
+  });
 
-    if (slug) fetchPost();
-  }, [slug]);
-
-  if (loading) {
+  if (isLoading) {
     return <div className="text-center mt-10">Loading...</div>;
   }
 
-  if (error) {
-    return <div className="text-center mt-10 text-red-500">{error}</div>;
+  if (isError) {
+    return (
+      <div className="text-center mt-10 text-red-500">
+        {(error as Error).message || "Error loading post"}
+      </div>
+    );
   }
 
   if (!post) {
@@ -55,29 +55,30 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10">
+    <div className="mt-3 flex flex-col gap-8 pt-10 max-w-6xl mx-auto px-6 lg:px-12">
       {post.imageUrl && (
-        <div className="flex justify-center p-0">
-        <Image
-          src={post.imageUrl}
-          alt={post.title}
-          className="max-w-md w-full h-auto rounded-lg"
-        />
-      </div>
+        <div className="flex justify-center mb-6">
+          <Image
+            src={post.imageUrl}
+            alt={post.title}
+            className="w-full max-w-md h-auto rounded-lg"
+          />
+        </div>
       )}
-      <h1 className="text-4xl font-bold pt-5">{post.title}</h1>
-      <p className="text-sm text-gray-600">
-        Published on {new Date(post.createdAt).toLocaleDateString()}
-      </p>
+      <h1 className="text-3xl sm:text-4xl font-bold pt-3">{post.title}</h1>
+      <p className="text-xs sm:text-sm text-gray-600 mt-1">
+  Published on {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : "Unknown date"}
+</p>
+
 
       <div
-        className="pb-1.5 mt-4 mb-8 text-base"
-        dangerouslySetInnerHTML={{ __html: post.description }}
+        className="mt-4 text-base sm:text-lg text-justify leading-relaxed"
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.description) }}
       />
 
       {post.content && (
         <div
-          className="ProseMirror prose dark:prose-invert max-w-none"
+          className="ProseMirror prose dark:prose-invert max-w-none mt-6 text-sm sm:text-base"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
       )}
