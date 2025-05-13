@@ -11,7 +11,7 @@ const Logout: React.FC = () => {
     const handleLogout= async ()=>{
         try{
             await axios.post(
-                "https://apibunhono-production.up.railway.app/api/v1/auth/signout",
+                "http://localhost:8080/api/v1/auth/signout",
                 {withCredentials: true}
             );
 

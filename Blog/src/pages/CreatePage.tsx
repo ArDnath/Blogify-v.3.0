@@ -18,7 +18,8 @@ interface BlogPostData {
 
 const CreatePage = () => {
   const [loading, setLoading] = useState(false);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { showNotification } = useNotification();
 
   const {
@@ -42,6 +43,9 @@ const CreatePage = () => {
     showNotification("Image uploaded successfully", "success");
   };
 
+  const handleUploadProgress = (progress: number) => {
+    setUploadProgress(progress);
+  };
 
   const onSubmit = async (data: BlogPostData) => {
     if (!data.imageUrl) {
@@ -57,7 +61,7 @@ const CreatePage = () => {
         return;
       }
 
-      await axios.post("https://apibunhono-production.up.railway.app/api/v1/post/create", data, {
+      await axios.post("http://localhost:8080/api/v1/post/create", data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,6 +75,7 @@ const CreatePage = () => {
       setValue("imageUrl", "");
       setValue("content", "");
       setImagePreview(null);
+      setUploadProgress(0);
     } catch (error) {
       const errorMsg =
         axios.isAxiosError(error) && error.response?.data?.message

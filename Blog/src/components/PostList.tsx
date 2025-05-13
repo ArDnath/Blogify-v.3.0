@@ -4,7 +4,7 @@ import axios from "axios";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const fetchPosts = async (pageParam: number) => {
-  const res = await axios.get(`https://apibunhono-production.up.railway.app/api/v1/post/all`, {
+  const res = await axios.get(`http://localhost:8080/api/v1/post/all`, {
     params: { page: pageParam, limit: 10 },
   });
   return res.data;

@@ -1,9 +1,0 @@
-{
-    "outputDirectory": "dist",
-    "framework": "vite",
-    "ignoreCommand": "echo 'No changes to ignore'",
-    "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
-  ]
-  }
-  

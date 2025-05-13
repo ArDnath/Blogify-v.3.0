@@ -19,7 +19,7 @@ const Login = () => {
     setError(null);
     try {
       const response = await axios.post(
-        "https://apibunhono-production.up.railway.app/api/v1/auth/signin",
+        "http://localhost:8080/api/v1/auth/signin",
         { email, password },
       );
 
@@ -29,7 +29,7 @@ const Login = () => {
 
       login(token);
       //Redirect to write Page
-      navigate("//MyWishWhatIWrite");
+      navigate("/write");
     } catch (error: any) {
       console.error("LoginError:", error);
       setError(error.respons?.data?.data?.message || "an error occured");
