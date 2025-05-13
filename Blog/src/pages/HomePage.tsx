@@ -1,23 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import PostList from '../components/PostList';
 import Image from '../components/IKHandlers/Image';
 
 const HomePage = () => {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/v1/post/all");
-        setPosts(response.data.posts);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-    fetchPosts();
-  }, []);
 
   return (
     <div className="mt-3 flex flex-col gap-8 pt-10 max-w-6xl mx-auto px-6 lg:px-12">
@@ -32,7 +17,7 @@ const HomePage = () => {
       <div className="pt-2 space-y-3">
         {/* Profile Image */}
         <div className="w-35 h-35 shadow-2xl rounded-full overflow-hidden  ">
-            <Image src="./Me.png" alt="Logo" className="w-full h-full object-cover" />
+            <Image src="./Me2.jpg" alt="Logo" className="w-full h-full object-cover" />
           </div>
         
         {/* Text Content */}
@@ -42,18 +27,20 @@ const HomePage = () => {
           </h1>
           <p className="mt-6 text-lg sm:text-xl leading-relaxed">
 
-            I am a FullStack Developer living in India. I have a passion for 
-            building, from writing the first line of code to deploying it to
-            some server across the globe, it all feels like magic with logic!!
+          I'm a Full Stack Developer based in India, driven by a deep passion for crafting end-to-end digital experiences. From architecting the first line of code to deploying robust applications to servers across the globe, I find magic in the logic behind every build. I thrive on turning ideas into scalable, high-performance products — blending clean code, thoughtful design, and seamless deployment into one continuous journey.
             
 
             <br/>
             <span className="block mt-4 text-gray-400">
-    Currently messing with{" "}
-    <span className="text-green-400 font-semibold animate-pulse">Reactjs</span>,{" "}
-    <span className="text-orange-400 font-semibold animate-pulse">Honojs</span>, and{" "}
-    <span className="text-blue-400 font-semibold animate-pulse">Typescript</span>⚡
-  </span>
+  Currently building with{" "}
+  <span className="text-green-400 font-semibold animate-pulse">React</span>,{" "}
+  <span className="text-orange-400 font-semibold animate-pulse">Hono</span>,{" "}
+  <span className="text-blue-400 font-semibold animate-pulse">TypeScript</span>, and tinkering with{" "}
+  <span className="text-yellow-400 font-semibold animate-pulse">Next.js</span>,{" "}
+  <span className="text-purple-400 font-semibold animate-pulse">Prisma</span> &{" "}
+  <span className="text-cyan-400 font-semibold animate-pulse">DevOps</span> tools ⚙️✨
+</span>
+
           </p>
         </div>
         

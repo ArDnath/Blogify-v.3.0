@@ -4,24 +4,24 @@ import { Link } from "react-router-dom";
 import Image from "../IKHandlers/Image";
 const Navbar: React.FC = () => {
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 dark:bg-gray-900/30 backdrop-blur-md transition-colors duration-300 px-4 sm:px-6 md:px-10">
+    <nav className="fixed top-0 left-0 w-full max-w-screen mx-auto z-50 backdrop-blur-md transition-colors duration-300 px-4 sm:px-6 md:px-10">
 
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-10 py-2 mt-4 border-4 rounded-full">
+      <div className="mx-auto flex min-h-20 sm:min-h-24  max-w-6xl items-center justify-between px-4 sm:px-6 md:px-10 py-2 mt-2 sm:mt-4 border-2 sm:border-4 rounded-full">
         {/* Logo */}
         <Link to="/">
-          <div className="w-14 h-14 rounded-full overflow-hidden border border-white/50 dark:border-gray-600">
+          <div className="w-12 sm:w-14 h-12 sm:h-14 rounded-full overflow-hidden ">
             <Image src="./Hue (1).png" alt="Logo" className="w-full h-full object-cover" />
           </div>
         </Link>
 
         {/* Right-side icons */}
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-4 sm:space-x-6">
           {/* Theme Toggle */}
           <DarkMode />
 
           {/* GitHub Icon */}
           <a
-            href="https://github.com/ariyaman1224"
+            href="https://github.com/ArDnath"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-transform duration-300 hover:scale-110"

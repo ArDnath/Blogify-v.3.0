@@ -36,7 +36,8 @@ const PostListItems: React.FC<PostListItemsProps> = ({ post, isLast }) => {
           <Image
             src={post.imageUrl}
             className="rounded-2xl object-cover w-full h-full max-h-60"
-            w="735"
+            
+          
           />
         </div>
       )}
