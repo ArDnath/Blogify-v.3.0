@@ -1,32 +1,33 @@
-#Build Stage
+# ---------- Build stage ----------
+    FROM oven/bun:alpine AS builder
+    WORKDIR /app
+    
+    # Use bun.lockb (the binary lockfile). If you don't have bun.lockb yet, run `bun install` locally once.
+    COPY package.json ./
+    RUN bun install --frozen-lockfile
+    
+    # Copy source and build to a deterministic output
+    COPY . .
+    # Change src/index.ts if your entry is another file
+    RUN bun build scripts/dev.ts --outdir dist --target bun
+    
+    # sanity: see what got built (shows in build logs)
+    RUN ls -la dist
+    
+    # ---------- Runtime stage ----------
+    FROM oven/bun:alpine
+    WORKDIR /app
+    ENV NODE_ENV=production
+    ENV PORT=3000
+    
+    # Only copy what's needed
+    COPY --from=builder /app/dist ./dist
+    COPY --from=builder /app/package.json ./
 
-FROM oven/bun:alpine AS builder
-
-WORKDIR /app
-
-COPY bun.lock package.json ./
-RUN bun install --no-save --frozen-lockfile
-
-
-COPY . .
-
-
-RUN bun run build
-
-
-# Runtime Stage
-
-FROM oven/bun:alpine
-
-WORKDIR /app
-
-
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/bun.lock ./
-
-RUN bun install --production --no-save --frozen-lockfile
-
-EXPOSE 3000
-
-CMD ["bun", "dist/index.js"]
+    
+    RUN bun install --production --frozen-lockfile
+    
+    EXPOSE 3000
+    # IMPORTANT: match the actual built file name
+    CMD ["bun", "dist/dev.js"]
+    
