@@ -17,13 +17,12 @@ interface ISignIn {
 //Generate Accesstoken and Refreshtoken utility function.
 
 export const generateAccessAndRefreshToken = async (
-  c: Context,
   userId: string,
-) => {
+): Promise<{ accessToken: string; refreshToken: string } | null> => {
   try {
     const user = await User.findById(userId);
     if (!user) {
-      return c.json({ error: "User not found" }, 404);
+      return null;
     }
 
     const accessToken = await user.generateAccessToken();
@@ -34,7 +33,7 @@ export const generateAccessAndRefreshToken = async (
 
     return { accessToken, refreshToken };
   } catch (error) {
-    return c.json({ error: "Internal server error" }, 500);
+    return null;
   }
 };
 
@@ -48,10 +47,7 @@ const registerUser = async (c: Context) => {
     const emailLower = email.toLocaleLowerCase();
 
     if ([email, username, password].some((field) => field?.trim() === "")) {
-      return {
-        data: { message: "All fields are required" },
-        status: 401,
-      };
+      return c.json({ success: false, message: "All fields are required" }, 400);
     }
 
     
@@ -146,30 +142,26 @@ const signIn = async (c: Context) => {
       });
     }
 
-    const tokens = await generateAccessAndRefreshToken(c, user._id as string);
+    const tokens = await generateAccessAndRefreshToken(user._id as string);
 
     if (!tokens) {
-      return c.json({
-        data: { message: "Failed to generate tokens" },
-        status: 500,
-      });
+      return c.json({ success: false, message: "Failed to generate tokens" }, 500);
     }
     const { accessToken, refreshToken } = tokens;
     const loggedInUser = await User.findById(user._id).select(
       "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
     );
 
-    return c.json({
-      loggedInUser,
-      accessToken,
-      data: { message: "User is Logged in Successfully" },
-      status: 200,
-    });
-  } catch (error: any) {
     return c.json(
-      { message: `Internal server error: ${error.message}` },
-      { status: 500 },
+      {
+        loggedInUser,
+        accessToken,
+        message: "User is Logged in Successfully",
+      },
+      200,
     );
+  } catch (error: any) {
+    return c.json({ message: `Internal server error: ${error.message}` }, 500);
   }
 };
 //SignOut controller

@@ -1,1 +1,16 @@
-{"projectId":"prj_1giUfaeqAeuuuczWSBykqVc1iak2","orgId":"team_TEtlRyf60108l0obWt880wA9","projectName":"bloghonobackend"}
+{
+  "projectId": "prj_1giUfaeqAeuuuczWSBykqVc1iak2",
+  "orgId": "team_TEtlRyf60108l0obWt880wA9",
+  "projectName": "bloghonobackend",
+  "settings": {
+    "createdAt": 1762250704618,
+    "framework": "hono",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "22.x"
+  }
+}
