@@ -1,20 +1,21 @@
-import app from "./app";
-import connectDB from "./db/connect";
+// api/index.ts
+import { handle } from 'hono/vercel'
+import { app } from './app'
+import connectDB from './db/connect'
 
+export const config = { runtime: 'nodejs' } // required for mongoose/Node builtins
 
-connectDB()
-.then(()=>{
-  console.log("Database connected.Starting server")
+// Connect once per serverless instance
+let dbReady: Promise<unknown> | null = null
+function ensureDB() {
+  if (!dbReady) dbReady = connectDB()
+  return dbReady
+}
 
-  const port = process.env.Port ;
-
-  Bun.serve({
-    fetch: app.fetch,
-    port,
-  });
-
-  console.log(`🚀 Server is running on http://localhost:${port}`)
+// Ensure DB before handling any route
+app.use('*', async (_c, next) => {
+  await ensureDB()
+  return next()
 })
-.catch((err) => {
-  console.error("❌ Failed to connect to database:", err);
-});
+
+export default handle(app)

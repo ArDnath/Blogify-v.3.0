@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "scripts": {
-    "dev": "bun run --hot src/index.ts",
+    "dev": "bun run scripts/dev.ts",
     "build": "bun build src/index.ts --outdir dist --external mongoose --target node"
   },
   "dependencies": {
