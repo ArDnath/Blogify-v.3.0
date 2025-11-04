@@ -1,5 +1,6 @@
 {
   "name": "backend",
+  "type": "module",
   "scripts": {
     "dev": "bun run scripts/dev.ts",
     "build": "bun build scripts/dev --outdir dist --external mongoose --target node"
