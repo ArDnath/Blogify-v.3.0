@@ -1,5 +1,6 @@
 import mongoose,{ Schema, model , models} from 'mongoose';
 import { sign } from 'hono/jwt';
+import bcrypt from 'bcryptjs';
 
 export interface IUser {
     username: string;
@@ -67,15 +68,12 @@ const userSchema = new Schema<IUser>({
 
 userSchema.pre("save", async function(next){
     if(!this.isModified("password")) return next();
-    this.password = await Bun.password.hash(this.password, {
-        algorithm: 'bcrypt',
-        cost: 10,
-    });
+    this.password = await bcrypt.hash(this.password, 10);
     next()
 })
 
 userSchema.methods.isPasswordCorrect = async function (password:string){
-    return await Bun.password.verify(password, this.password);
+    return await bcrypt.compare(password, this.password);
 }
 
 //Generate Access Token

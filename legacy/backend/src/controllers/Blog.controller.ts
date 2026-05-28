@@ -2,8 +2,8 @@ import { Context } from "hono";
 import Blog from "../models/Post.model";
 import User from "../models/User.model";
 import { JSDOM } from "jsdom";
-const ImageKit = require("imagekit");
-const createDOMPurify = require("dompurify");
+import ImageKit from "imagekit";
+import createDOMPurify from "dompurify";
 
 
 

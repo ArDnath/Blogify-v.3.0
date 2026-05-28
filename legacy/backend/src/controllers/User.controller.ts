@@ -120,26 +120,28 @@ const signIn = async (c: Context) => {
   try {
     const { username, email, password }: ISignIn = await c.req.json();
     const emailLower = email ? email.toLowerCase() : null;
-    const userNameLower = username && username.toLocaleLowerCase();
+    const userNameLower = username ? username.toLowerCase() : null;
+
+    const searchConditions = [];
+    if (emailLower) searchConditions.push({ email: emailLower });
+    if (userNameLower) searchConditions.push({ username: userNameLower });
+
+    if (searchConditions.length === 0) {
+      return c.json({ success: false, message: "Email or username is required" }, 400);
+    }
 
     const user = await User.findOne({
-      $or: [{ email: emailLower }, { userName: userNameLower }],
+      $or: searchConditions,
     });
 
     if (!user) {
-      return c.json({
-        data: { message: "User not found" },
-        status: 404,
-      });
+      return c.json({ success: false, message: "User not found" }, 404);
     }
 
     const isPasswordCorrect = await user.isPasswordCorrect(password);
 
     if (!isPasswordCorrect) {
-      return c.json({
-        data: { message: "Invalid password" },
-        status: 401,
-      });
+      return c.json({ success: false, message: "Invalid password" }, 401);
     }
 
     const tokens = await generateAccessAndRefreshToken(user._id as string);
@@ -176,7 +178,7 @@ const signOut = async (c: Context) => {
   } catch (error: any) {
     return c.json(
       { message: `Internal server error: ${error.message}` },
-      { status: 500 },
+      500,
     );
   }
 };

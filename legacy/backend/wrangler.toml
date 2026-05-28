@@ -1,0 +1,14 @@
+name = "blogify-backend"
+main = "src/worker.ts"
+compatibility_date = "2024-03-01"
+
+# Environment variables for your worker
+[vars]
+PORT = "3000"
+CORS_ORIGIN = "*"
+ACCESS_TOKEN_EXPIRY = "3600"
+REFRESH_TOKEN_EXPIRY = "604800"
+USER_TEMPORARY_TOKEN_EXPIRY = "1200000"
+
+# Note: For sensitive secrets (like ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, MONGO_URI, and IMAGEKIT keys),
+# do NOT put them here. Instead, run `wrangler secret put SECRET_NAME` or add them via the Cloudflare Dashboard.

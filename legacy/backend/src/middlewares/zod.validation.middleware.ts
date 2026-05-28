@@ -13,14 +13,14 @@ export const validationRequest = (schema: ZodSchema) =>{
                     message: issue.message,
                 }))
 
-                return c.json({issues}, {status:400})
+                return c.json({issues}, 400)
             }
             else if(error instanceof Error){
                 return c.json(
                     {
                         message: error.message
                     },
-                    { status :400}
+                    400
                 )
 
 
@@ -28,7 +28,7 @@ export const validationRequest = (schema: ZodSchema) =>{
             else{
                 return c.json(
                     {message: "Invalid request data"},
-                    {status: 400}
+                    400
                 )
             }
             
