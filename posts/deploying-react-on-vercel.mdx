@@ -1,0 +1,181 @@
+---
+title: "Deploying a React App to Vercel — The Right Way"
+description: "A complete, no-fluff guide to deploying a React application on Vercel — from the first commit all the way to custom domains, environment variables, and preview deployments."
+date: "2026-05-28"
+tags: ["React", "Vercel", "Deployment", "DevOps"]
+coverImage: "https://ik.imagekit.io/Ariyaman/blog/image_7bXlq75Gt?updatedAt=1747077369184"
+---
+
+Vercel is the easiest way to ship a React app. But there are a few things worth understanding properly — environment variables, preview deployments, custom domains — so that your setup is solid from day one, not something you patch later.
+
+This is the guide I wish I had when I started.
+
+## Prerequisites
+
+- A React app (Vite, Create React App, or Next.js)
+- A GitHub account with your code pushed to a repository
+- A free Vercel account — sign up at [vercel.com](https://vercel.com) with GitHub
+
+## Step 1 — Prepare Your Project
+
+Before you deploy, make sure your project builds without errors locally:
+
+```bash
+# For Vite
+npm run build
+
+# For Create React App
+npm run build
+
+# For Next.js
+npm run build
+```
+
+Fix any type errors or missing dependency warnings now — Vercel runs the exact same build command in a clean environment.
+
+### Check your `.gitignore`
+
+Your `.gitignore` must exclude build outputs and local secrets. At minimum:
+
+```
+node_modules/
+dist/
+.next/
+.env
+.env.local
+.env*.local
+```
+
+Commit these files if you haven't:
+
+```bash
+git add .gitignore
+git commit -m "chore: add gitignore"
+git push
+```
+
+## Step 2 — Import Your Project on Vercel
+
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Click **"Import Git Repository"** and select your repo
+3. Vercel will auto-detect your framework and set the correct build command:
+   - **Vite:** `vite build` → output: `dist/`
+   - **CRA:** `react-scripts build` → output: `build/`
+   - **Next.js:** `next build` → output: `.next/`
+
+You usually don't need to change anything here. Click **Deploy**.
+
+Within 30–60 seconds your app is live on a `.vercel.app` URL.
+
+## Step 3 — Environment Variables
+
+Never commit secrets to Git. If your app hits an API, you need environment variables.
+
+### Adding them on Vercel
+
+1. Open your project dashboard on Vercel
+2. Go to **Settings → Environment Variables**
+3. Add your variables:
+
+```
+VITE_API_URL=https://api.yourdomain.com
+VITE_IMAGEKIT_PUBLIC_KEY=public_...
+```
+
+> **Important for Vite:** variables must be prefixed with `VITE_` to be exposed to the browser bundle. For Create React App the prefix is `REACT_APP_`. Next.js uses `NEXT_PUBLIC_` for client-side variables.
+
+### Environment scopes
+
+Vercel lets you set variables per environment:
+
+| Scope | When it applies |
+|---|---|
+| **Production** | Deployed from your main/master branch |
+| **Preview** | Every pull request deployment |
+| **Development** | When you run `vercel dev` locally |
+
+This means you can point preview deployments at a staging API and production at your real one — without changing any code.
+
+## Step 4 — Preview Deployments (The Killer Feature)
+
+Every time you open a pull request on GitHub, Vercel automatically builds it and gives it a unique URL like:
+
+```
+https://my-app-git-feature-branch-username.vercel.app
+```
+
+This means:
+- You can share a working preview link with a collaborator before merging
+- You can catch bugs that only appear after building (not just in dev)
+- No staging server to maintain
+
+To test this, create a branch, push a change, and open a PR on GitHub. Vercel will post a comment on the PR with the preview URL automatically.
+
+## Step 5 — Custom Domain
+
+1. Go to **Settings → Domains** in your Vercel project
+2. Add your domain, e.g. `blog.ariyaman.dev`
+3. Vercel gives you DNS records to add at your registrar (usually an `A` record or `CNAME`)
+4. Once DNS propagates (usually under 5 minutes with Cloudflare), your domain is live with HTTPS — fully managed, no certificate setup needed
+
+## Step 6 — Automatic Deploys on Push
+
+Once set up, your workflow is:
+
+```bash
+git add .
+git commit -m "feat: new blog post"
+git push origin main
+```
+
+Vercel detects the push, runs your build, and deploys the new version. The entire process takes under a minute. Your old deployment stays live until the new one passes — so there's zero downtime.
+
+## Common Gotchas
+
+### Client-side routing 404s
+
+If you're using React Router and a user navigates directly to `/blog/post-1`, Vercel needs to know to serve `index.html` instead of returning a 404.
+
+Create a `vercel.json` file at the project root:
+
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+This is only needed for Vite/CRA SPAs. Next.js handles this automatically.
+
+### Build succeeds locally but fails on Vercel
+
+This almost always means:
+1. A dependency is in `devDependencies` when it should be in `dependencies`
+2. A case-sensitivity issue (Linux on Vercel is case-sensitive, macOS is not)
+3. An environment variable is missing in the Vercel dashboard
+
+Check the build logs in the Vercel dashboard — they show the exact error with a stack trace.
+
+### Large bundle sizes
+
+Vercel will warn you if your bundle is unusually large. Common culprits are importing an entire library when you only need one function:
+
+```js
+// ❌ Imports the entire lodash library
+import _ from 'lodash';
+
+// ✅ Import only what you need
+import debounce from 'lodash/debounce';
+```
+
+## Summary
+
+Vercel makes deployment genuinely easy — import your repo, add your env vars, push to main. That's the core loop.
+
+The things that separate a well-configured deployment from a rough one are:
+- Environment variables scoped correctly per environment
+- `vercel.json` for SPA routing rewrites
+- Preview deployments wired up to your PR workflow
+
+Once it's set up, deploying feels like just running `git push`.

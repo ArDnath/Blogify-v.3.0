@@ -35,3 +35,7 @@ next-env.d.ts
 .env
 .env*.local
 .env.local
+
+# Legacy code archive (old Vite frontend + Hono backend)
+# Remove this line if you want to commit legacy/ to Git for archival purposes
+legacy/

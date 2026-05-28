@@ -5,8 +5,8 @@ import Image from "next/image";
 
 const Navbar: React.FC = () => {
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 transition-colors duration-300 px-4 sm:px-6 md:px-10">
-      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-10 py-2 mt-4 border border-gray-200/80 dark:border-white/10 rounded-full bg-white/60 dark:bg-gray-950/60 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300">
+    <nav className="fixed top-0 left-0  w-full z-50 transition-colors duration-300 px-4 sm:px-6 md:px-10">
+      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-10 py-2 mt-4 border-4 border-gray-400/40 dark:border-white/30 rounded-full bg-white/10 dark:bg-gray-950/60 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300">
         {/* Logo */}
         <Link href="/">
           <div className="w-14 h-14 rounded-full overflow-hidden border border-white/50 dark:border-gray-600 relative cursor-pointer">
@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
 
           {/* GitHub Icon */}
           <a
-            href="https://github.com/ariyaman1224"
+            href="https://github.com/ArDnath"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-transform duration-300 hover:scale-110"
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
 
           {/* X (Twitter) Icon */}
           <a
-            href="https://twitter.com"
+            href="https://x.com/AriyamanDe12_24"
             target="_blank"
             rel="noopener noreferrer"
             className="transition-transform duration-300 hover:scale-110"
